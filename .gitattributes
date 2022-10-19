@@ -14,5 +14,5 @@ CHANGELOG.md export-ignore
 
 
 
-rbac_manager/public/lib/* linguist-vendored
-rbac_manager/public/static/* linguist-vendored
+public/lib/* linguist-vendored
+public/static/* linguist-vendored
