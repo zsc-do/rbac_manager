@@ -9,3 +9,11 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+
+*.js linguist-language=java
+*.css linguist-language=java
+*.html linguist-language=java
+
+
+rbac_manager/public/lib linguist-vendored
