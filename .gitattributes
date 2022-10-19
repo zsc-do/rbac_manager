@@ -13,6 +13,4 @@ CHANGELOG.md export-ignore
 
 
 
-
-public/lib/* linguist-vendored
-public/static/* linguist-vendored
+*.js linguist-vendored
