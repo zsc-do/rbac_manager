@@ -194,6 +194,7 @@ function layer_show(title,url,w,h){
 	if (h == null || h == '') {
 		h=($(window).height() - 50);
 	};
+
 	layer.open({
 		type: 2,
 		area: [w+'px', h +'px'],
@@ -235,42 +236,6 @@ function toNavPos(){
 }
 $(function(){
 
-
-    $.ajax({
-        type:"GET",
-        url:"/getTreeMenu",
-        dataType:"JSON",
-        success:function(result){//回调函数
-
-            let menu_dropdown = document.getElementsByClassName('menu_dropdown')[0];
-
-
-
-
-            for(let i=0;i < result.length;i++){
-                let dl = document.createElement('dl');
-                let dt = document.createElement('dt');
-
-                dt.innerHTML= '<i class="Hui-iconfont">&#xe62e;</i> ' + result[i].menu_name + '<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>';
-                dl.appendChild(dt);
-
-                let dd = document.createElement('dd');
-                let childMenu = result[i].childMenu;
-                for (let j=0;j < childMenu.length;j++){
-                    let ul = document.createElement('ul');
-
-                    let url = "\""+childMenu[j].menu_url+"\"";
-                    let title = "\""+childMenu[j].menu_name +"\"";
-                    console.log(childMenu[j]);
-                    ul.innerHTML = '<li><a data-href=' + url + ' data-title=' + title + ' href="javascript:void(0)">' + childMenu[j].menu_name +'</a></li>';
-
-                    dd.appendChild(ul);
-
-                }
-                dl.appendChild(dd);
-
-                menu_dropdown.appendChild(dl);
-            }
 
 
 
@@ -358,7 +323,7 @@ $(function(){
 
 
 
-        }
-    })
+
+
 
 });

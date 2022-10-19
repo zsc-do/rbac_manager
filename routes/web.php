@@ -26,15 +26,30 @@ Route::get('/', function () {
 Route::controller(LoginController::class)->group(function () {
 
     Route::get('/login', 'login')->name('login');
-    Route::post('doLogin', 'doLogin');
-    Route::get('logout', 'logout');
+    Route::post('/doLogin', 'doLogin');
+    Route::get('/logout', 'logout');
 
 
 });
 
 Route::controller(SysMenuController::class)->group(function () {
 
-    Route::get('getTreeMenu', 'getTreeMenu');
+    Route::get('/sys/getTreeMenu', 'getTreeMenu');
+    Route::get('/sys/menuView', 'menuView');
+    Route::get('/sys/menuList', 'menuList');
+
+    Route::get('/sys/getAllML', 'getAllML');
+    Route::get('/sys/getAllCD', 'getAllCD');
+    Route::get('/sys/getMenu', 'getMenu');
+
+    Route::get('/sys/menuAddPage', 'menuAddPage');
+    Route::post('/sys/menuAdd', 'menuAdd');
+
+    Route::get('/sys/menuEditPage', 'menuEditPage');
+    Route::post('/sys/menuEdit', 'menuEdit');
+
+    Route::get('/sys/menuRemove', 'menuRemove');
+
 
 
 });

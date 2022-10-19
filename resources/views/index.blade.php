@@ -130,18 +130,18 @@
 <aside class="Hui-aside">
 	<div class="menu_dropdown bk_2">
 
-		<dl>
-			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a data-href="system-base.html" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>
-					<li><a data-href="system-category.html" data-title="栏目管理" href="javascript:void(0)">栏目管理</a></li>
-					<li><a data-href="system-data.html" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>
-					<li><a data-href="system-shielding.html" data-title="屏蔽词" href="javascript:void(0)">屏蔽词</a></li>
-					<li><a data-href="system-log.html" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
-			</ul>
-		</dd>
-	</dl>
+{{--		<dl>--}}
+{{--			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>--}}
+{{--			<dd>--}}
+{{--				<ul>--}}
+{{--					<li><a data-href="system-base.html" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>--}}
+{{--					<li><a data-href="system-category.html" data-title="栏目管理" href="javascript:void(0)">栏目管理</a></li>--}}
+{{--					<li><a data-href="system-data.html" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>--}}
+{{--					<li><a data-href="system-shielding.html" data-title="屏蔽词" href="javascript:void(0)">屏蔽词</a></li>--}}
+{{--					<li><a data-href="system-log.html" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>--}}
+{{--			</ul>--}}
+{{--		</dd>--}}
+{{--	</dl>--}}
 
 </div>
 </aside>
@@ -178,7 +178,7 @@
 <script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
-<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/menu.js"></script>
 <!--/_footer 作为公共模版分离出去-->
 
 <!--请在下方写此页面业务相关的脚本-->
