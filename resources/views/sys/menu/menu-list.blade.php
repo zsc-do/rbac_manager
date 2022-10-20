@@ -33,7 +33,7 @@
         <input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
         <button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
     </div>
-    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加菜单','/sys/menuAddPage','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加菜单</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加菜单','/sys/menu/menuAddPage','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加菜单</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
     <table class="table table-border table-bordered table-bg">
         <thead>
         <tr>
@@ -43,7 +43,7 @@
             <th width="25"><input type="checkbox" name="" value=""></th>
             <th width="40">ID</th>
             <th width="150">菜单名</th>
-            <th width="90">菜单url</th>
+            <th width="150">菜单url</th>
             <th width="150">类型</th>
             <th>权限标志</th>
             <th>父级菜单</th>
@@ -78,7 +78,7 @@
 
     $.ajax({
         type:"GET",
-        url:"/sys/menuList",
+        url:"/sys/menu/menuList",
         dataType:"JSON",
         success:function(result){//回调函数
 
@@ -107,7 +107,7 @@
                     <td>${menuType}</td>
                     <td>${result[i].menu_perms}</td>
                     <td>${result[i].pName}</td>
-                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('菜单编辑','/sys/menuEditPage','800','500',${result[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
+                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('菜单编辑','/sys/menu/menuEditPage','800','500',${result[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
 
                 menusTable.appendChild(tr);
 
@@ -134,7 +134,7 @@
         layer.confirm('确认要删除吗？',function(index){
             $.ajax({
                 type: 'get',
-                url: '/sys/menuRemove?menuId=' + id,
+                url: '/sys/menu/menuRemove?menuId=' + id,
                 success: function(data){
                     $(obj).parents("tr").remove();
                     layer.msg('已删除!',{icon:1,time:1000});

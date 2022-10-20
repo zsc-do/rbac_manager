@@ -241,7 +241,7 @@ $(function(){
 
     $.ajax({
         type:"GET",
-        url:"/sys/getTreeMenu",
+        url:"/sys/menu/getTreeMenu",
         dataType:"JSON",
         success:function(result){//回调函数
 

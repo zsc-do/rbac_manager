@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
 <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+    <!-- 引入 layui.css -->
 <!--[if IE 6]>
 <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
@@ -25,56 +26,55 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal" id="form-admin-add" action="/sys/menuAdd">
+	<form class="form form-horizontal" id="form-admin-add">
         {{csrf_field()}}
 	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>菜单名：</label>
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用户名：</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" value="" placeholder="" id="adminName" name="menuName">
+			<input type="text" class="input-text" value="" placeholder="" id="userName">
 		</div>
 	</div>
 
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>菜单url：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="adminName" name="menuUrl">
+                <input type="text" class="input-text" value="" placeholder="" id="password">
             </div>
         </div>
+
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>菜单名权限标志：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>电话：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="adminName" name="menuPerms">
+                <input type="text" class="input-text" value="" placeholder="" id="phone">
             </div>
         </div>
 
 
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>菜单类型：</label>
-		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
-			<div class="radio-box" >
-				<input  value="M" name="cat" type="radio" id="cat-M" checked>
-				<label for="sex-1">目录</label>
-			</div>
-			<div class="radio-box">
-				<input value="C" type="radio" id="cat-C" name="cat">
-				<label for="sex-2">菜单</label>
-			</div>
-            <div class="radio-box">
-                <input value="F" type="radio" id="cat-F" name="cat">
-                <label for="sex-2">按钮</label>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
+            <div class="formControls col-xs-8 col-sm-9 skin-minimal">
+                <div class="radio-box" >
+                    <input  value="1" name="gender" type="radio" id="cat-M" checked>
+                    <label for="sex-1">男</label>
+                </div>
+                <div class="radio-box">
+                    <input value="0" type="radio" id="cat-C" name="gender">
+                    <label for="sex-2">女</label>
+                </div>
+
             </div>
-		</div>
-	</div>
+        </div>
 
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3">父菜单：</label>
-		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
-			<select class="select" id="Pmenu" name="Pmenu" size="1">
-                    <option value="0">目录</option>
 
-			</select>
-			</span> </div>
-	</div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">选择角色：</label>
+            <div id="myDlist" class="formControls col-xs-8 col-sm-9 xm-select-1">
+            </div>
+        </div>
+
+
+
+
 
 	<div class="row cl">
 		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
@@ -82,7 +82,10 @@
 		</div>
 	</div>
 	</form>
+
+
 </article>
+
 
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
@@ -94,89 +97,69 @@
 <script type="text/javascript" src="/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
 <script type="text/javascript" src="/lib/jquery.validation/1.14.0/validate-methods.js"></script>
 <script type="text/javascript" src="/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+<!-- 引入 layui.css -->
+<link href="/lib/layui/css/layui.css" rel="stylesheet">
+
+<!-- 引入 layui.js -->
+<script src="/lib/layui//layui.js"></script>
+<script src="/static/h-ui.admin/js/xm-select.js"></script>
 <script type="text/javascript">
 
 
-    let menuId = window.location.href.split('=')[1];
-
-
+    let userId = window.location.href.split('=')[1];
     $.ajax({
-        type: 'get',
-        url: "/sys/menu/getMenu?menuId=" + menuId,
+        type:'get',
+        url: "/sys/user/getUser?userId=" + userId,
         success: function(data){
-            let menu = data[0];
+            let user= data[0];
 
             let inputs = document.getElementsByTagName('input');
 
-            inputs[1].setAttribute('value',menu.menu_name);
-            inputs[2].setAttribute('value',menu.menu_url);
-            inputs[3].setAttribute('value',menu.menu_perms);
+            inputs[1].setAttribute('value',user.user_name);
+            inputs[2].setAttribute('value','');
+            inputs[3].setAttribute('value',user.phone);
+
         }
     })
 
-    $('input[type =radio][name= cat]').on('ifChecked', function(event){
-        //获取值
-        let v = $(event.target).val();
 
-        if (v === 'M'){
+let XmSelect = {};
 
-            $('#Pmenu').empty();
-            let optionMenu = document.createElement('option');
-            optionMenu.setAttribute('value','0');
-            optionMenu.innerText = '目录';
-            Pmenu.appendChild(optionMenu);
+$.ajax({
+    type:'get',
+    url: '/sys/role/roleList',
+    success: function(data){
 
-        }else if(v === 'C'){
+        let roles = [];
 
-            $('#Pmenu').empty();
-
-            $.ajax({
-                type: 'get',
-                url: "/sys/menu/getAllML" ,
-                success: function(data){
-
-
-                    let Pmenu = document.getElementById('Pmenu');
-
-                    for (let i = 0; i < data.length; i++) {
-                        let optionMenu = document.createElement('option');
-                        optionMenu.setAttribute('value',data[i].menu_id);
-                        optionMenu.innerText = data[i].menu_name;
-                        Pmenu.appendChild(optionMenu);
-                    }
-
-                },
-            })
-        }else if (v === 'F'){
-            $('#Pmenu').empty();
-
-            $.ajax({
-                type: 'get',
-                url: "/sys/menu/getAllCD" ,
-                success: function(data){
-                    console.log(data);
-
-
-
-                    let Pmenu = document.getElementById('Pmenu');
-
-                    for (let i = 0; i < data.length; i++) {
-                        let optionMenu = document.createElement('option');
-                        optionMenu.setAttribute('value',data[i].menu_id);
-                        optionMenu.innerText = data[i].menu_name;
-                        Pmenu.appendChild(optionMenu);
-                    }
-
-                },
-            })
+        for (let i = 0; i < data.length; i++) {
+            let role = {};
+            role.name = data[i].role_name;
+            role.value = data[i].role_id;
+            roles.push(role);
         }
-    });
+
+
+        XmSelect = xmSelect.render({
+            el: '.xm-select-1',
+            repeat: true,
+            clickClose: true,
+            theme: {
+                color: '#1cbbb4',
+            },
+            data: roles
+        })
+    }
+})
+
+
+
+
+
 
 
 $(function(){
-
-
-
 
 
 	$('.skin-minimal input').iCheck({
@@ -210,7 +193,7 @@ $(function(){
 				required:true,
 				email:true,
 			},
-			adminRole:{
+			adminuser:{
 				required:true,
 			},
 		},
@@ -218,16 +201,28 @@ $(function(){
 		focusCleanup:true,
 		success:"valid",
 		submitHandler:function(form){
-			$(form).ajaxSubmit({
+
+
+            let userName = document.getElementById('userName').value;
+            let password = document.getElementById('password').value;
+            let phone = document.getElementById('phone').value;
+
+            let gender = $('input:radio[name="gender"]:checked').val();
+
+            let selectedRoles = XmSelect.getValue('valueStr');
+
+
+            $(form).ajaxSubmit({
 				type: 'post',
-				url: "/sys/menu/menuEdit?menuId="  + menuId ,
+				url: "/sys/user/userEdit" ,
+                traditional: true,
+                data: {userId:userId,userName:userName,password,password,phone:phone,gender:gender,selectedRoles:selectedRoles},
 				success: function(data){
-					layer.msg('添加成功!',{icon:1,time:1000});
+					layer.msg('修改成功!',{icon:1,time:1000});
 					var index = parent.layer.getFrameIndex(window.name);
 
-
                     window.parent.location.reload();//刷新父页面
-                    layer.msg('success!',{icon:2,time:1000});
+                    parent.layer.close(index);
 
 
                 },

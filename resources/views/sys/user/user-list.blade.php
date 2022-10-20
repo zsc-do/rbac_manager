@@ -21,7 +21,7 @@
     <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
-    <title>角色列表</title>
+    <title>用户列表</title>
 </head>
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员列表 <a class="btn  btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
@@ -33,7 +33,7 @@
         <input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
         <button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
     </div>
-    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加角色','/sys/role/roleAddPage','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加用户','/sys/user/userAddPage','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
     <table class="table table-border table-bordered table-bg">
         <thead>
         <tr>
@@ -42,12 +42,13 @@
         <tr class="text-c">
             <th width="25"><input type="checkbox" name="" value=""></th>
             <th width="40">ID</th>
-            <th width="100">角色名</th>
-            <th width="150">备注</th>
+            <th width="100">用户名</th>
+            <th width="150">电话</th>
+            <th width="100">性别</th>
             <th width="100">操作</th>
         </tr>
         </thead>
-        <tbody id="roles_id">
+        <tbody id="users_id">
 {{--        <tr class="text-c">--}}
 {{--            <td><input type="checkbox" value="1" name=""></td>--}}
 {{--            <td>1</td>--}}
@@ -75,12 +76,12 @@
 
     $.ajax({
         type:"GET",
-        url:"/sys/role/roleList",
+        url:"/sys/user/userList",
         dataType:"JSON",
         success:function(result){//回调函数
 
 
-            let rolesTable = document.getElementById('roles_id');
+            let usersTable = document.getElementById('users_id');
 
             for (let i = 0; i <result.length; i++) {
                 let tr = document.createElement('tr');
@@ -90,11 +91,12 @@
 
                 tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
                     <td>1</td>
-                    <td>${result[i].role_name}</td>
-                    <td>${result[i].remark}</td>
-                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('角色编辑','/sys/role/roleEditPage','800','500',${result[i].role_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result[i].role_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
+                    <td>${result[i].user_name}</td>
+                    <td>${result[i].phone}</td>
+                    <td>${result[i].gender}</td>
+                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','/sys/user/userEditPage','800','500',${result[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
 
-                rolesTable.appendChild(tr);
+                usersTable.appendChild(tr);
 
             }
 
@@ -119,7 +121,7 @@
         layer.confirm('确认要删除吗？',function(index){
             $.ajax({
                 type: 'get',
-                url: '/sys/role/roleRemove?roleId=' + id,
+                url: '/sys/user/userRemove?userId=' + id,
                 success: function(data){
                     $(obj).parents("tr").remove();
                     layer.msg('已删除!',{icon:1,time:1000});

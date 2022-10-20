@@ -91,7 +91,7 @@
 
     $.ajax({
         type: 'get',
-        url: "/sys/getRole?roleId=" + roleId,
+        url: "/sys/role/getRole?roleId=" + roleId,
         success: function(data){
             let role= data[0];
 
@@ -105,7 +105,7 @@
     let treeMenu = [];
     $.ajax({
         type: 'get',
-        url: "/sys/getTreeMenu" ,
+        url: "/sys/menu/getTreeMenu" ,
         success: function(data){
 
 
@@ -187,7 +187,7 @@
 
             $.ajax({
                 type: 'get',
-                url: "/sys/getAllML" ,
+                url: "/sys/menu/getAllML" ,
                 success: function(data){
 
 
@@ -207,7 +207,7 @@
 
             $.ajax({
                 type: 'get',
-                url: "/sys/getAllCD" ,
+                url: "/sys/menu/getAllCD" ,
                 success: function(data){
                     console.log(data);
 
@@ -299,7 +299,7 @@
 
                 $(form).ajaxSubmit({
                     type: 'post',
-                    url: "/sys/roleEdit?roleId="  + roleId ,
+                    url: "/sys/role/roleEdit?roleId="  + roleId ,
                     traditional: true,
                     data: {roleName:roleName,remark:remark,checkedMenus:s},
                     success: function(data){

@@ -89,7 +89,7 @@
     let treeMenu = [];
     $.ajax({
         type: 'get',
-        url: "/sys/getTreeMenu" ,
+        url: "/sys/menu/getTreeMenu" ,
         success: function(data){
 
 
@@ -171,7 +171,7 @@
 
             $.ajax({
                 type: 'get',
-                url: "/sys/getAllML" ,
+                url: "/sys/menu/getAllML" ,
                 success: function(data){
 
 
@@ -191,7 +191,7 @@
 
             $.ajax({
                 type: 'get',
-                url: "/sys/getAllCD" ,
+                url: "/sys/menu/getAllCD" ,
                 success: function(data){
                     console.log(data);
 
@@ -286,7 +286,7 @@ $(function(){
 
             $(form).ajaxSubmit({
 				type: 'post',
-				url: "/sys/roleAdd" ,
+				url: "/sys/role/roleAdd" ,
                 traditional: true,
                 data: {roleName:roleName,remark:remark,checkedMenus:s},
 				success: function(data){
