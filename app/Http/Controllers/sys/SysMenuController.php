@@ -25,6 +25,16 @@ class SysMenuController
 
                 foreach ($menus as $menu2){
                     if ($menu2->parent_id === $menu->menu_id){
+                        $MTree = array();
+
+                        foreach ($menus as $menu3){
+                            if ($menu3->parent_id === $menu2->menu_id){
+                                array_push($MTree,$menu3);
+                            }
+                        }
+
+                        $menu2->childMenu = $MTree;
+
                         array_push($CTree,$menu2);
                     }
 

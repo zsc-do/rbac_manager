@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\sys\LoginController;
 use App\Http\Controllers\sys\SysMenuController;
+use App\Http\Controllers\sys\SysRoleController;
 use App\Models\SysUser;
 use App\util\HashPasswordUtil;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,26 @@ Route::controller(SysMenuController::class)->group(function () {
     Route::post('/sys/menuEdit', 'menuEdit');
 
     Route::get('/sys/menuRemove', 'menuRemove');
+
+
+
+});
+
+
+Route::controller(SysRoleController::class)->group(function () {
+
+    Route::get('/sys/role/View', 'roleView');
+    Route::get('/sys/roleList', 'roleList');
+    Route::get('/sys/getRole', 'getRole');
+
+
+    Route::get('/sys/roleAddPage', 'roleAddPage');
+    Route::post('/sys/roleAdd', 'roleAdd');
+
+    Route::get('/sys/roleEditPage', 'roleEditPage');
+    Route::post('/sys/roleEdit', 'roleEdit');
+
+    Route::get('/sys/roleRemove', 'roleRemove');
 
 
 
