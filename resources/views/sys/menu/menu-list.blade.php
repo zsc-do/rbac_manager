@@ -136,6 +136,12 @@
                 type: 'get',
                 url: '/sys/menu/menuRemove?menuId=' + id,
                 success: function(data){
+
+                    if(data === '没有权限'){
+                        layer.msg('没有权限!',{icon:2,time:1000});
+                        return;
+                    }
+
                     $(obj).parents("tr").remove();
                     layer.msg('已删除!',{icon:1,time:1000});
                 },

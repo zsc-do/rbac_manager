@@ -4,30 +4,61 @@ namespace App\Http\Controllers\sys;
 
 use App\Models\SysMenu;
 use App\Models\SysRole;
+use App\util\AuthPermissionUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SysRoleController
 {
 
-    public function roleView(){
+    public function roleView(Request $request){
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:role:view',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         return view('sys.role.role-list');
     }
 
 
-    public function roleList(){
+    public function roleList(Request $request){
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:role:list',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $roles = SysRole::all();
 
         return response()->json($roles);
     }
 
 
-    public function roleAddPage(){
+    public function roleAddPage(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:role:add',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         return view('sys.role.role-add');
     }
 
 
     public function roleAdd(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:role:add',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $roleName = $request->input('roleName');
         $remark = $request->input('remark');
 
@@ -56,7 +87,15 @@ class SysRoleController
     }
 
 
-    public function roleEditPage(){
+    public function roleEditPage(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:role:edit',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         return view('sys.role.role-edit');
     }
 
@@ -65,6 +104,14 @@ class SysRoleController
 
 
     public function roleEdit(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:role:edit',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $roleId = $request->input('roleId');
         $roleName = $request->input('roleName');
         $remark = $request->input('remark');
@@ -98,6 +145,14 @@ class SysRoleController
 
 
     public function roleRemove(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:role:remove',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $roleId = $request->input('roleId');
 
         DB::table('sys_role')->where('role_id', '=', $roleId)->delete();

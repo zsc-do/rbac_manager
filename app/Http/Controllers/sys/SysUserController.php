@@ -4,6 +4,7 @@ namespace App\Http\Controllers\sys;
 
 use App\Models\SysRole;
 use App\Models\SysUser;
+use App\util\AuthPermissionUtil;
 use App\util\HashPasswordUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,24 +12,56 @@ use Illuminate\Support\Facades\DB;
 class SysUserController
 {
 
-    public function userView(){
+    public function userView(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:user:view',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         return view('sys.user.user-list');
     }
 
 
 
-    public function userList(){
+    public function userList(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:user:list',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $users = Sysuser::all();
 
         return response()->json($users);
     }
 
 
-    public function userAddPage(){
+    public function userAddPage(Request $request){
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:user:add',$userId)){
+            echo "没有权限";
+            return;
+        };
+
+
         return view('sys.user.user-add');
     }
 
     public function userAdd(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:user:add',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $userName = $request->input('userName');
         $password= $request->input('password');
         $phone= $request->input('phone');
@@ -57,12 +90,30 @@ class SysUserController
     }
 
 
-    public function userEditPage(){
+    public function userEditPage(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:user:edit',$userId)){
+            echo "没有权限";
+            return;
+        };
+
+
+
         return view('sys.user.user-edit');
     }
 
 
     public function userEdit(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:user:edit',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $userId = $request->input('userId');
         $userName = $request->input('userName');
         $password= $request->input('password');
@@ -96,6 +147,14 @@ class SysUserController
 
 
     public function userRemove(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:user:remove',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $userId = $request->input('userId');
 
         DB::table('sys_user')->where('user_id', '=', $userId)->delete();

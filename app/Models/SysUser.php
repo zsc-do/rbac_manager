@@ -18,4 +18,5 @@ class SysUser extends Authenticatable
         return $this->belongsToMany(SysRole::class,'sys_user_role',
             'user_id', 'role_id');
     }
+
 }

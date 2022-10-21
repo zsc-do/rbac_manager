@@ -24,6 +24,9 @@ class LoginController
         $sysUser = SysUser::where('user_name', $username)->first();
 
         if (HashPasswordUtil::checkPassword($password, $sysUser->password)){
+
+            $request->session()->put('userId', $sysUser->user_id);
+
             return view('index');
         }else{
             return view('login');

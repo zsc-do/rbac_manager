@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\sys;
 
 use App\Models\SysMenu;
+use App\Models\SysRole;
+use App\Models\SysUser;
+use App\util\AuthPermissionUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
@@ -13,7 +17,6 @@ class SysMenuController
     public function getTreeMenu(){
 
         $menus = SysMenu::all();
-
 
         $menuTree = array();
 
@@ -50,11 +53,86 @@ class SysMenuController
     }
 
 
-    public function menuView(){
+    public function getAuthMenu(Request $request){
+
+
+
+        $userId = $request->session()->get('userId');
+
+
+        $roles = SysUser::find($userId)->sysRoles()->get();
+
+        $authMenus = [];
+        $menuflag = [];
+
+        foreach ($roles as $role){
+            $menus = SysRole::find($role->role_id)->sysMenus()->get();
+
+            foreach ($menus as $menu){
+                if (!in_array($menu->menu_id,$menuflag)){
+                    array_push($authMenus,$menu);
+                    array_push($menuflag,$menu->menu_id);
+                }
+            }
+        }
+
+
+        //变为树结构
+        $treeMenu = [];
+
+        foreach ($authMenus as $menu){
+
+            if ($menu->parent_id === 0){
+
+                $CTree = array();
+
+                foreach ($authMenus as $menu2){
+                    if ($menu2->parent_id === $menu->menu_id){
+                        $MTree = array();
+
+                        foreach ($authMenus as $menu3){
+                            if ($menu3->parent_id === $menu2->menu_id){
+                                array_push($MTree,$menu3);
+                            }
+                        }
+
+                        $menu2->childMenu = $MTree;
+
+                        array_push($CTree,$menu2);
+                    }
+
+                }
+                $menu->childMenu = $CTree;
+
+                array_push($treeMenu,$menu);
+            }
+        }
+
+        return response()->json($treeMenu);
+    }
+
+
+    public function menuView(Request $request){
+
+        $userId = $request->session()->get('userId');
+
+        if (!AuthPermissionUtil::AuthPermission('system:menu:view',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         return view('sys.menu.menu-list');
     }
 
-    public function menuList(){
+    public function menuList(Request $request){
+
+        $userId = $request->session()->get('userId');
+        if (!AuthPermissionUtil::AuthPermission('system:menu:list',$userId)){
+            echo "没有权限";
+            return;
+        };
+
+
         $menus = SysMenu::all();
 
         foreach ($menus as $menu){
@@ -74,6 +152,13 @@ class SysMenuController
     }
 
     public function menuAdd(Request $request){
+
+        $userId = $request->session()->get('userId');
+        if (!AuthPermissionUtil::AuthPermission('system:menu:add',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $menuName = $request->input('menuName');
         $menu_url = $request->input('menuUrl');
         $menuPerms= $request->input('menuPerms');
@@ -95,12 +180,26 @@ class SysMenuController
     }
 
 
-    public function menuEditPage(){
+    public function menuEditPage(Request $request){
+
+        $userId = $request->session()->get('userId');
+        if (!AuthPermissionUtil::AuthPermission('system:menu:edit',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         return view('sys.menu.menu-edit');
     }
 
 
     public function menuEdit(Request $request){
+
+        $userId = $request->session()->get('userId');
+        if (!AuthPermissionUtil::AuthPermission('system:menu:edit',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $menuId = $request->input('menuId');
         $menuName = $request->input('menuName');
         $menu_url = $request->input('menuUrl');
@@ -119,6 +218,13 @@ class SysMenuController
     }
 
     public function menuRemove(Request $request){
+
+        $userId = $request->session()->get('userId');
+        if (!AuthPermissionUtil::AuthPermission('system:menu:remove',$userId)){
+            echo "没有权限";
+            return;
+        };
+
         $menuId = $request->input('menuId');
 
         DB::table('sys_menu')->where('menu_id', '=', $menuId)->delete();

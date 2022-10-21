@@ -241,15 +241,11 @@ $(function(){
 
     $.ajax({
         type:"GET",
-        url:"/sys/menu/getTreeMenu",
+        url:"/sys/menu/getAuthMenu",
         dataType:"JSON",
         success:function(result){//回调函数
 
-
-
             let menu_dropdown = document.getElementsByClassName('menu_dropdown')[0];
-
-
 
 
             for(let i=0;i < result.length;i++){
@@ -276,8 +272,6 @@ $(function(){
 
                 menu_dropdown.appendChild(dl);
             }
-
-
 
 
             getHTMLDate($("#top_time"));

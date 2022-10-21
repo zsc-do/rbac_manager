@@ -37,6 +37,7 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(SysMenuController::class)->group(function () {
 
     Route::get('/sys/menu/getTreeMenu', 'getTreeMenu');
+    Route::get('/sys/menu/getAuthMenu', 'getAuthMenu');
     Route::get('/sys/menu/menuView', 'menuView');
     Route::get('/sys/menu/menuList', 'menuList');
 
