@@ -227,6 +227,15 @@ class SysMenuController
 
         $menuId = $request->input('menuId');
 
+
+        $existence = DB::table('sys_role_menu')->where('menu_id', '=', $menuId)->first();
+
+
+        if ($existence !== null){
+            echo "有角色使用该菜单，无法删除！";
+            return;
+        }
+
         DB::table('sys_menu')->where('menu_id', '=', $menuId)->delete();
     }
 

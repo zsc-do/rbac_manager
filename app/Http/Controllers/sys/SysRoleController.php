@@ -153,8 +153,17 @@ class SysRoleController
             return;
         };
 
+
         $roleId = $request->input('roleId');
 
+
+        $existence = DB::table('sys_user_role')->where('role_id', '=', $roleId)->first();
+
+
+        if ($existence !== null){
+            echo "有用户使用该角色，无法删除！";
+            return;
+        }
         DB::table('sys_role')->where('role_id', '=', $roleId)->delete();
 
         DB::table('sys_role_menu')->where('role_id', '=', $roleId)->delete();

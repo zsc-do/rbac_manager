@@ -60,7 +60,10 @@
 {{--        </tr>--}}
 
         </tbody>
+
+
     </table>
+    <div id="laypage" style="float: right"></div>
 </div>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
@@ -72,18 +75,24 @@
 <script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="/lib/datatables/1.10.15/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+<!-- 引入 layui.css -->
+<link href="/lib/layui/css/layui.css" rel="stylesheet">
+
+<!-- 引入 layui.js -->
+<script src="/lib/layui//layui.js"></script>
 <script type="text/javascript">
 
     $.ajax({
         type:"GET",
-        url:"/sys/user/userList",
+        url:"/sys/user/userList?perPage=" + 2,
         dataType:"JSON",
         success:function(result){//回调函数
 
 
             let usersTable = document.getElementById('users_id');
 
-            for (let i = 0; i <result.length; i++) {
+            let users = result.data;
+            for (let i = 0; i <users.length; i++) {
                 let tr = document.createElement('tr');
                 tr.setAttribute('class','text-c');
 
@@ -91,15 +100,63 @@
 
                 tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
                     <td>1</td>
-                    <td>${result[i].user_name}</td>
-                    <td>${result[i].phone}</td>
-                    <td>${result[i].gender}</td>
-                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','/sys/user/userEditPage','800','500',${result[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
+                    <td>${users[i].user_name}</td>
+                    <td>${users[i].phone}</td>
+                    <td>${users[i].gender}</td>
+                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','/sys/user/userEditPage','800','500',${users.user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${users[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
 
                 usersTable.appendChild(tr);
 
             }
 
+
+            let laypage = layui.laypage;
+
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'laypage' //注意，这里的 test1 是 ID，不用加 # 号
+                ,count: result.total //数据总数，从服务端得到
+                ,limit:result.per_page
+                ,jump: function(obj, first){
+                    //obj包含了当前分页的所有参数，比如：
+                    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                    console.log(obj.limit); //得到每页显示的条数
+                    //首次不执行
+                    if(!first){
+                        //do something
+
+                        $('#users_id').empty();
+
+                        $.ajax({
+                        type:"GET",
+                            url:"/sys/user/userList?page=" +obj.curr + "&perPage="  + obj.limit,
+                            dataType:"JSON",
+                            success:function(result){//回调函数
+
+
+                            let usersTable = document.getElementById('users_id');
+
+                            let users = result.data;
+                            for (let i = 0; i <users.length; i++) {
+                                let tr = document.createElement('tr');
+                                tr.setAttribute('class','text-c');
+
+
+
+                                tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
+                                <td>1</td>
+                                <td>${users[i].user_name}</td>
+                                <td>${users[i].phone}</td>
+                                <td>${users[i].gender}</td>
+                                <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','/sys/user/userEditPage','800','500',${users.user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${users[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
+
+                                usersTable.appendChild(tr);
+
+                            }
+                        }})
+                    }
+                }
+            });
 
         }
     })

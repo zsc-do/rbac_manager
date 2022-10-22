@@ -35,10 +35,18 @@ class SysUserController
             return;
         };
 
-        $users = Sysuser::all();
+
+        $perPage = $request->input('perPage');
+
+
+        $users = Sysuser::paginate($perPage);;
 
         return response()->json($users);
     }
+
+
+
+
 
 
     public function userAddPage(Request $request){

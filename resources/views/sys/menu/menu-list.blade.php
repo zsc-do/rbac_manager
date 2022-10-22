@@ -34,32 +34,20 @@
         <button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
     </div>
     <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加菜单','/sys/menu/menuAddPage','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加菜单</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
-    <table class="table table-border table-bordered table-bg">
+    <table id="tree_table" class="table table-border table-bordered table-bg ">
         <thead>
         <tr>
             <th scope="col" colspan="9">员工列表</th>
         </tr>
         <tr class="text-c">
-            <th width="25"><input type="checkbox" name="" value=""></th>
-            <th width="40">ID</th>
+            <th width="50">菜单类型</th>
             <th width="150">菜单名</th>
             <th width="150">菜单url</th>
-            <th width="150">类型</th>
-            <th>权限标志</th>
-            <th>父级菜单</th>
+            <th width="150">权限标志</th>
             <th width="100">操作</th>
         </tr>
         </thead>
         <tbody id="menus_id">
-{{--        <tr class="text-c">--}}
-{{--            <td><input type="checkbox" value="1" name=""></td>--}}
-{{--            <td>1</td>--}}
-{{--            <td>admin</td>--}}
-{{--            <td>13000000000</td>--}}
-{{--            <td>admin@mail.com</td>--}}
-{{--            <td>超级管理员</td>--}}
-{{--            <td class="td-manage"><a style="text-decoration:none" onClick="admin_stop(this,'10001')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>--}}
-{{--        </tr>--}}
 
         </tbody>
     </table>
@@ -74,46 +62,83 @@
 <script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="/lib/datatables/1.10.15/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+
+<link href="https://cdn.bootcdn.net/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.min.css" rel="stylesheet">
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery-treetable/3.2.0/jquery.treetable.min.js"></script>
 <script type="text/javascript">
 
     $.ajax({
         type:"GET",
-        url:"/sys/menu/menuList",
+        url:"/sys/menu/getTreeMenu",
         dataType:"JSON",
         success:function(result){//回调函数
 
 
             let menusTable = document.getElementById('menus_id');
 
+
             for (let i = 0; i <result.length; i++) {
                 let tr = document.createElement('tr');
-                tr.setAttribute('class','text-c');
+                tr.setAttribute('class', 'text-c');
+                tr.setAttribute('data-tt-id', result[i].menu_id);
+                tr.setAttribute('data-tt-parent-id', '0');
 
 
-                let menuType = '';
-                if (result[i].menu_type === 'M'){
-                    menuType = '目录';
-                }else if (result[i].menu_type === 'C'){
-                    menuType = '菜单';
-                }else if (result[i].menu_type === 'F'){
-                    menuType = '按钮';
-                }
-
-
-                tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
-                    <td>1</td>
+                tr.innerHTML = `<td>目录</td>
                     <td>${result[i].menu_name}</td>
                     <td>${result[i].menu_url}</td>
-                    <td>${menuType}</td>
                     <td>${result[i].menu_perms}</td>
-                    <td>${result[i].pName}</td>
                     <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('菜单编辑','/sys/menu/menuEditPage','800','500',${result[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
 
                 menusTable.appendChild(tr);
 
+
+                result1 = result[i].childMenu;
+
+                for (let i = 0; i < result1.length; i++) {
+                    let tr = document.createElement('tr');
+                    tr.setAttribute('class', 'text-c');
+                    tr.setAttribute('data-tt-id', result1[i].menu_id);
+                    tr.setAttribute('data-tt-parent-id', result1[i].parent_id);
+
+
+                    tr.innerHTML = `<td>菜单</td>
+                    <td>${result1[i].menu_name}</td>
+                    <td>${result1[i].menu_url}</td>
+                    <td>${result1[i].menu_perms}</td>
+                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('菜单编辑','/sys/menu/menuEditPage','800','500',${result1[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result1[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
+
+                    menusTable.appendChild(tr);
+
+
+                    result2 = result1[i].childMenu;
+                    for (let i = 0; i < result2.length; i++) {
+                        let tr = document.createElement('tr');
+                        tr.setAttribute('class', 'text-c');
+                        tr.setAttribute('data-tt-id', result2[i].menu_id);
+                        tr.setAttribute('data-tt-parent-id', result2[i].parent_id);
+
+
+                        tr.innerHTML = `<td>按钮</td>
+                    <td>${result2[i].menu_name}</td>
+                    <td>${result2[i].menu_url}</td>
+                    <td>${result2[i].menu_perms}</td>
+                    <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('菜单编辑','/sys/menu/menuEditPage','800','500',${result2[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${result2[i].menu_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
+
+                        menusTable.appendChild(tr);
+                    }
+
+
+                }
+
+
             }
 
+            $("#tree_table").treetable({
+                expandable: true,
+            });
 
+            menusTable.appendChild(top_tr);
         }
     })
     /*
@@ -139,6 +164,9 @@
 
                     if(data === '没有权限'){
                         layer.msg('没有权限!',{icon:2,time:1000});
+                        return;
+                    }else if(data === '有角色使用该菜单，无法删除！'){
+                        layer.msg('有角色使用该菜单，无法删除！',{icon:2,time:1000});
                         return;
                     }
 

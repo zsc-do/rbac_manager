@@ -125,6 +125,9 @@
                     if(data === '没有权限'){
                         layer.msg('没有权限!',{icon:2,time:1000});
                         return;
+                    }else if(data === '有用户使用该角色，无法删除！'){
+                        layer.msg('有用户使用该角色，无法删除！',{icon:2,time:1000});
+                        return;
                     }
 
                     $(obj).parents("tr").remove();
