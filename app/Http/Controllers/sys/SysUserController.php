@@ -37,9 +37,9 @@ class SysUserController
 
 
         $perPage = $request->input('perPage');
+        $userName = $request->input('userName');
 
-
-        $users = Sysuser::paginate($perPage);;
+        $users = Sysuser::where('user_name','like','%'.$userName.'%')->paginate($perPage);;
 
         return response()->json($users);
     }

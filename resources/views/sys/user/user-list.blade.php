@@ -24,20 +24,17 @@
     <title>用户列表</title>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员列表 <a class="btn  btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户管理 <span class="c-gray en">&gt;</span> 用户列表 <a class="btn  btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
-    <div class="text-c"> 日期范围：
-        <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin" class="input-text Wdate" style="width:120px;">
-        -
-        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax" class="input-text Wdate" style="width:120px;">
-        <input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
-        <button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+    <div class="text-c">
+        <input type="text" class="input-text" style="width:250px" placeholder="输入用户名称" id="userName" name="">
+        <button onclick="searchUserList()" type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
     </div>
     <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加用户','/sys/user/userAddPage','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
     <table class="table table-border table-bordered table-bg">
         <thead>
         <tr>
-            <th scope="col" colspan="9">员工列表</th>
+            <th scope="col" colspan="9">用户列表</th>
         </tr>
         <tr class="text-c">
             <th width="25"><input type="checkbox" name="" value=""></th>
@@ -49,15 +46,7 @@
         </tr>
         </thead>
         <tbody id="users_id">
-{{--        <tr class="text-c">--}}
-{{--            <td><input type="checkbox" value="1" name=""></td>--}}
-{{--            <td>1</td>--}}
-{{--            <td>admin</td>--}}
-{{--            <td>13000000000</td>--}}
-{{--            <td>admin@mail.com</td>--}}
-{{--            <td>超级管理员</td>--}}
-{{--            <td class="td-manage"><a style="text-decoration:none" onClick="admin_stop(this,'10001')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>--}}
-{{--        </tr>--}}
+
 
         </tbody>
 
@@ -65,13 +54,11 @@
     </table>
     <div id="laypage" style="float: right"></div>
 </div>
-<!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
 
-<!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="/lib/datatables/1.10.15/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
@@ -82,84 +69,100 @@
 <script src="/lib/layui//layui.js"></script>
 <script type="text/javascript">
 
-    $.ajax({
-        type:"GET",
-        url:"/sys/user/userList?perPage=" + 2,
-        dataType:"JSON",
-        success:function(result){//回调函数
 
 
-            let usersTable = document.getElementById('users_id');
+    function loadUserList(){
 
-            let users = result.data;
-            for (let i = 0; i <users.length; i++) {
-                let tr = document.createElement('tr');
-                tr.setAttribute('class','text-c');
+        let userName = document.getElementById('userName').value || '';
+
+        $.ajax({
+            type:"GET",
+            url:"/sys/user/userList?userName=" + userName + "&perPage=" + 5,
+            dataType:"JSON",
+            success:function(result){//回调函数
+
+                $('#users_id').empty();
+
+                let usersTable = document.getElementById('users_id');
+
+                let users = result.data;
+                for (let i = 0; i <users.length; i++) {
+                    let tr = document.createElement('tr');
+                    tr.setAttribute('class','text-c');
 
 
 
-                tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
+                    tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
                     <td>1</td>
                     <td>${users[i].user_name}</td>
                     <td>${users[i].phone}</td>
                     <td>${users[i].gender}</td>
                     <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','/sys/user/userEditPage','800','500',${users.user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${users[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
 
-                usersTable.appendChild(tr);
+                    usersTable.appendChild(tr);
 
-            }
-
-
-            let laypage = layui.laypage;
-
-            //执行一个laypage实例
-            laypage.render({
-                elem: 'laypage' //注意，这里的 test1 是 ID，不用加 # 号
-                ,count: result.total //数据总数，从服务端得到
-                ,limit:result.per_page
-                ,jump: function(obj, first){
-                    //obj包含了当前分页的所有参数，比如：
-                    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-                    console.log(obj.limit); //得到每页显示的条数
-                    //首次不执行
-                    if(!first){
-                        //do something
-
-                        $('#users_id').empty();
-
-                        $.ajax({
-                        type:"GET",
-                            url:"/sys/user/userList?page=" +obj.curr + "&perPage="  + obj.limit,
-                            dataType:"JSON",
-                            success:function(result){//回调函数
+                }
 
 
-                            let usersTable = document.getElementById('users_id');
+                let laypage = layui.laypage;
 
-                            let users = result.data;
-                            for (let i = 0; i <users.length; i++) {
-                                let tr = document.createElement('tr');
-                                tr.setAttribute('class','text-c');
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'laypage' //注意，这里的 test1 是 ID，不用加 # 号
+                    ,count: result.total //数据总数，从服务端得到
+                    ,limit:result.per_page
+                    ,jump: function(obj, first){
+                        //obj包含了当前分页的所有参数，比如：
+                        console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                        console.log(obj.limit); //得到每页显示的条数
+                        //首次不执行
+                        if(!first){
+                            //do something
+
+                            $('#users_id').empty();
+
+                            $.ajax({
+                                type:"GET",
+                                url:"/sys/user/userList?page=" +obj.curr + "&perPage="  + obj.limit +"&userName=" + userName,
+                                dataType:"JSON",
+                                success:function(result){//回调函数
+
+
+                                    let usersTable = document.getElementById('users_id');
+
+                                    let users = result.data;
+                                    for (let i = 0; i <users.length; i++) {
+                                        let tr = document.createElement('tr');
+                                        tr.setAttribute('class','text-c');
 
 
 
-                                tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
+                                        tr.innerHTML = `<td><input type="checkbox" value="1" name=""></td>
                                 <td>1</td>
                                 <td>${users[i].user_name}</td>
                                 <td>${users[i].phone}</td>
                                 <td>${users[i].gender}</td>
                                 <td class="td-manage"> <a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','/sys/user/userEditPage','800','500',${users.user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,${users[i].user_id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>`;
 
-                                usersTable.appendChild(tr);
+                                        usersTable.appendChild(tr);
 
-                            }
-                        }})
+                                    }
+                                }})
+                        }
                     }
-                }
-            });
+                });
 
-        }
-    })
+            }
+        })
+    }
+
+
+    loadUserList();
+
+    function searchUserList(){
+        loadUserList();
+    }
+
     /*
         参数解释：
         title	标题

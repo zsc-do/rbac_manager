@@ -27,7 +27,7 @@ class LoginController
 
             $request->session()->put('userId', $sysUser->user_id);
 
-            return view('index');
+            return view('index')->with('userName', $sysUser->user_name);
         }else{
             return view('login');
         };
